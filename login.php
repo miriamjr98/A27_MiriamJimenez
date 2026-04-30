@@ -5,13 +5,16 @@ $error="";
 
 #Procesa el inicio de sesión compara usuario y contraseña con la tabla de usuarios.
 if ($_SERVER['REQUEST_METHOD'] == 'POST'){
-    $resultado = $conn->query("SELECT * FROM usuarios WHERE nombre='{$_POST['usuario']}' 
-    AND contrasenya='{$_POST['contrasenya']}'");
+    $usuario_post = $_POST['usuario']; 
+    $pass_post = $_POST['contrasenya'];
+
+    $resultado = $conn->query("SELECT * FROM usuarios WHERE nombre='$usuario_post' AND contrasenya='$pass_post'");
+    
     if ($resultado->num_rows == 1){
-        $_SESSION['usuario'] == $_POST['nombre'];
+        $_SESSION['usuario'] = $usuario_post; 
         header("Location: index.php");
         exit();
-    }else{
+    } else {
         $error = "Contraseña o usuario incorrectos.";
     }
 }
@@ -28,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
     <?php if ($error != "")
         echo "<p>$error</p>"; ?>
     <form method="POST">
-        Usuario: <input type="text" name="nombre"><br><br>
+        Usuario: <input type="text" name="usuario"><br><br>
         Contraseña: <input type="password" name="contrasenya"><br><br>
         <input type="submit" value="Entrar">
     </form>
